@@ -1,128 +1,242 @@
-# Library Management System API
-<hr>
-This project is a Library Management System API built using Spring Boot. It allows librarians to manage books, patrons, and borrowing records efficiently.
-
+# Address Book Backend API<hr>
+This is a Java Spring Boot back-end application for **user registration** and **contact management**.  
+It allows users to **sign up**, **sign in**, and **manage their personal address book** securely.
 ## Table of Contents
 
 1. [Project Description](#project-description)
-2. [Database erd](#project-description)
-3. [Features](#features)
-4. [Technologies Used](#technologies-used)
-5. [API Documentation](#api-documentation)
+2. [Features](#features)
+3. [Technologies Used](#technologies-used)
 
 ## Project Description
 
-The Library Management System API is designed to streamline the operations of a library by allowing librarians to manage books, patrons, and borrowing records efficiently. Built using Spring Boot, this system provides a robust and scalable backend for library management, offering RESTful endpoints for easy interaction.
-
-## Database erd
-![image](Database/erd.png)
+This project is a Java Spring Boot back-end API for user registration and contact management. It allows users to sign up, sign in, and manage their personal address book. Users can securely store and manage contacts with details like name, phone, email, and birthdate. The app includes JWT-based authentication, password hashing, and input validation for enhanced security.
 
 ## Features
 
-### 1- Authentication and Authorization
-- **Add a new liberian**  
-  `POST /api/auth/register`  
-   allows the registration of a new librarian in the library system.
+### 1. **Authentication & Authorization**
+- **Register a new user**  
+ `POST /api/v1/auth/register`  
+  Registers a new user and returns a basic success response.
 
-- **Retrieve a token or authorization**  
-  `POST /api/auth/login`  
-  authenticate and receive a token for authorized access to the library system by email and password.
+**📝 Request Example:**
+```json
+{
+  "email": "email@gmail.com",
+  "password": "12345678",
+  "contacts": [
+    {
+      "firstName": "your first name",
+      "lastName": "your first name",
+      "phoneNumber": "01234567899",
+      "birthdate": "2003-01-02",
+      "emailAddress": "email@gmail.com"
+    }
+  ]
+}
+```
 
-### 2- Book Management
+**📝 Response Example:**
+```json
 
-- **Retrieve a list of all books**  
-  `GET /api/books`  
-  Retrieves a list of all books in the library.
-
-- **Retrieve details of a specific book by ID**  
-  `GET /api/books/{id}`  
-  Retrieves details of a specific book identified by its ID.
-
-- **Add a new book to the library**  
-  `POST /api/books`  
-  Adds a new book to the library with provided details.
-
-- **Update an existing book's information**  
-  `PUT /api/books/{id}`  
-  Updates the information of an existing book identified by its ID.
-
-- **Remove a book from the library**  
-  `DELETE /api/books/{id}`  
-  Removes a book from the library using its ID.
-
-### 3- Patron Management
-- **Retrieve a list of all patrons**  
-  `GET /api/patrons`  
-  Retrieves a list of all patrons registered in the system.
-
-- **Retrieve details of a specific patron by ID**  
-  `GET /api/patrons/{id}`  
-  Retrieves details of a specific patron identified by their ID.
-
-- **Add a new patron to the system**  
-  `POST /api/patrons`  
-  Adds a new patron to the system with provided details.
-
-- **Update an existing patron's information**  
-  `PUT /api/patrons/{id}`  
-  Updates the information of an existing patron identified by their ID.
-
-- **Remove a patron from the system**  
-  `DELETE /api/patrons/{id}`  
-  Removes a patron from the system using their ID.
+{
+"success": true,
+"status": 200,
+"data": "User registered successfully"
+}
+```
 
 
-### 4- Borrowing Records
-- **Allow a patron to borrow a book**  
-  `POST /api/borrow/{bookId}/patron/{patronId}`  
-  Allows a patron to borrow a book, specifying the book and patron IDs.
+- **Login and receive JWT token**  
+  `POST /api/v1/auth/login`  
+  Authenticates user and returns a JWT token to access protected resources.
 
-- **Record the return of a borrowed book by a patron**  
-  `PUT /api/return/{bookId}/patron/{patronId}`  
-  Records the return of a borrowed book by a patron, specifying the book and patron IDs.
+**📝 Request Example:**
+```json
+{
+  "email": "mostafa@gmail.com",
+  "password": "12345678"
+}
+```
 
+**📝 Response Example:**
+```json
+{
+  "success": true,
+  "status": 200,
+  "data": {
+    "token": "eyJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJDb3JlbGlhIiwic3ViIjoiOSIsImlhdCI6MTc0NDM4NTM5MywiZXhwIjoxNzQ0OTkwMTkzfQ.tWLzD0mcsLhi7pyfwWWINhz6MNZC5sclw2JaLjYuHDI",
+    "user": {
+      "id": 9,
+      "email": "mostafa@gmail.com",
+      "password": "$2a$10$cqHo2B4j5y9rdxJfFFsWkuQZ8EQsGiJCMChk8wY0TvGFjrYwu09v2",
+      "contacts": [
+        {
+          "id": 1,
+          "firstName": "mostafa",
+          "lastName": "tarek",
+          "phoneNumber": "01061082296",
+          "emailAddress": "mostafa1@gmail.com",
+          "birthdate": "2003-01-02",
+          "userId": null
+        },
+        {
+          "id": 2,
+          "firstName": "mostafa",
+          "lastName": "mostafa",
+          "phoneNumber": "mostafa",
+          "emailAddress": "mostafa2@gmail.com",
+          "birthdate": "2020-01-01",
+          "userId": null
+        }
+      ]
+    }
+  }
+}
+```
+
+### 2. **User Contact Management**
+
+- **Add a new contact**  
+  `POST /api/v1/user-contacts`  
+  Adds a contact for the currently authenticated user.
+
+**📝 Request Example:**
+```json
+{
+  "firstName": "mostafa",
+  "lastName": "mostafa",
+  "phoneNumber": "mostafa",
+  "emailAddress": "mostafa2@gmail.com",
+  "birthdate": "2020-01-01",
+  "userId": 9
+}
+```
+
+**📝 Response Example:**
+```json
+{
+  "data": {
+    "id": 2,
+    "firstName": "mostafa",
+    "lastName": "mostafa",
+    "phoneNumber": "mostafa",
+    "emailAddress": "mostafa2@gmail.com",
+    "birthdate": "2020-01-01",
+    "userId": null
+  },
+  "success": true,
+  "status": 200
+}
+```
+
+- **Get all contacts for a user (paginated)**  
+  `POST /api/v1/user-contacts/user/{userId}`  
+  Retrieves all contacts for the given user with optional search criteria.
+
+**📝 Request Example:**
+```json
+{
+  "pageNumber" : 0,
+  "pageSize" : 1,
+  "sortableColumn" : "firstName" // lastName,birthdate
+}
+```
+
+**📝 Response Example:**
+```json
+{
+  "success": true,
+  "status": 200,
+  "data": {
+    "content": [
+      {
+        "id": 2,
+        "firstName": "mostafa",
+        "lastName": "mostafa",
+        "phoneNumber": "mostafa",
+        "emailAddress": "mostafa2@gmail.com",
+        "birthdate": "2020-01-01",
+        "userId": 9
+      },
+      {
+        "id": 1,
+        "firstName": "mostafa",
+        "lastName": "tarek",
+        "phoneNumber": "01061082296",
+        "emailAddress": "mostafa1@gmail.com",
+        "birthdate": "2003-01-02",
+        "userId": 9
+      }
+    ],
+    "pageable": {
+      "pageNumber": 0,
+      "pageSize": 10,
+      "sort": {
+        "sorted": true,
+        "empty": false,
+        "unsorted": false
+      },
+      "offset": 0,
+      "paged": true,
+      "unpaged": false
+    },
+    "last": true,
+    "totalPages": 1,
+    "totalElements": 2,
+    "first": true,
+    "size": 10,
+    "number": 0,
+    "sort": {
+      "sorted": true,
+      "empty": false,
+      "unsorted": false
+    },
+    "numberOfElements": 2,
+    "empty": false
+  }
+}
+```
+
+- **Get a contact by ID**  
+  `GET /api/v1/user-contacts/{contactId}`  
+  Retrieves a specific contact by its unique ID.
+
+**📝 Response Example:**
+```json
+ {
+  "data": {
+    "id": 2,
+    "firstName": "mostafa",
+    "lastName": "mostafa",
+    "phoneNumber": "mostafa",
+    "emailAddress": "mostafa2@gmail.com",
+    "birthdate": "2020-01-01",
+    "userId": 9
+  },
+  "success": true,
+  "status": 200
+}
+```
+
+- **Delete a contact**  
+  `DELETE /api/v1/user-contacts/{contactId}`  
+  Deletes a contact by ID.
+
+**📝 Response Example:**
+```json
+{
+"data": null,
+"success": true,
+"status": 200
+}
+```
 ## Technologies Used
 
-- **Java**  
-- **Spring Boot**  
-- **Spring Data JPA**  
-- **Spring AOP**  
-- **Spring Security**  
-- **Caching**
-- **Maven**  
-- **My-sql**  
-
-## API Documentation
-
-
-- **Swagger Documentation**:
-  - Access the Swagger UI to explore the API endpoints:
-    - URL: `http://localhost:8080/swagger-ui/index.html`
-
-- **Authentication Endpoints**:
-  - `POST /api/auth/register`
-  - `POST /api/auth/login`
-
-- **Book Endpoints**:
-  - `GET /api/books/`
-  - `GET /api/books/{id}`
-  - `POST /api/books/`
-  - `PUT /api/books/`
-  - `DELETE /api/books/{id}`
-  
-- **Patron Endpoints**:
-  - `GET /api/patrons/`
-  - `GET /api/patrons/{id}`
-  - `POST /api/patrons/`
-  - `PUT /api/patrons/`
-  - `DELETE /api/patrons/{id}`
-
-- **Borrowing endpoints**:
-  - `POST /api/borrow/{bookId}/patron/{patronId}`
-  - `PUT /api/return/{bookId}/patron/{patronId}`
-
-## Additional Notes
-
-- **Authentication and authorization are required.**
-  - `Book, Patron, Borrowing`
-
+- **Java 17+**
+- **Spring Boot**
+- **Spring Security (JWT)**
+- **Spring Data JPA**
+- **Lombok**
+- **Hibernate Validator (Jakarta Validation)**
+- **MySQL**
+- **Maven**

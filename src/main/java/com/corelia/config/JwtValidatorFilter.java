@@ -52,6 +52,9 @@ public class JwtValidatorFilter extends OncePerRequestFilter {
 
     @Override
     protected boolean shouldNotFilter(HttpServletRequest request) {
-        return  request.getRequestURI().startsWith("/api/v1/auth");
+        return  request.getRequestURI().startsWith("/api/v1/auth")
+                | request.getRequestURI().startsWith("/swagger-ui")
+                | request.getRequestURI().startsWith("/favicon.ico")
+                | request.getRequestURI().startsWith("/v3/api-docs");
     }
 }

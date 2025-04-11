@@ -18,6 +18,9 @@ public class SecurityConfig {
 
     private final String[] PERMIT_URL = {
             "api/v1/auth/**",
+            "swagger-ui/**",
+            "v3/api-docs/**",
+            "favicon.ico/**",
     };
 
     @Bean
